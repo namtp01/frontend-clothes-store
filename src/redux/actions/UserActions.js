@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ORDER_LIST_MY_RESET } from '../constants/OrderConstants.js';
 import { USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_RESET, USER_DETAILS_SUCCESS, USER_FORGOT_PASSWORD, USER_FORGOT_PASSWORD_FAIL, USER_FORGOT_PASSWORD_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_RESET_PASSWORD, USER_RESET_PASSWORD_FAIL, USER_RESET_PASSWORD_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS } from '../constants/UserConstants.js';
+import api from './../../api';
 // LOGIN
 export const login = (email,password) => async(dispatch) => {
     try {
@@ -12,7 +13,8 @@ export const login = (email,password) => async(dispatch) => {
             }
         }
 
-        const {data} = await axios.post(`/api/users/login`, {email,password}, config)
+        //const {data} = await axios.post(`/api/users/login`, {email,password}, config)
+        const {data} = await api.post(`/api/users/login`, {email,password}, config)
         dispatch({ type: USER_LOGIN_SUCCESS, payload: data})
 
         localStorage.setItem("userInfo", JSON.stringify(data))
@@ -51,7 +53,8 @@ export const register = (name, email, password) => async(dispatch) => {
             }
         }
 
-        const {data} = await axios.post(`/api/users`, {name, email, password}, config)
+        //const {data} = await axios.post(`/api/users`, {name, email, password}, config)
+        const {data} = await api.post(`/api/users`, {name, email, password}, config)
         dispatch({ type: USER_REGISTER_SUCCESS, payload: data})
         dispatch({ type: USER_LOGIN_SUCCESS, payload: data})
 
@@ -79,7 +82,8 @@ export const getUserDetails = (id) => async(dispatch, getState) => {
             }
         }
 
-        const {data} = await axios.get(`/api/users/${id}`, config)
+        //const {data} = await axios.get(`/api/users/${id}`, config)
+        const {data} = await api.get(`/api/users/${id}`, config)
         dispatch({ type: USER_DETAILS_SUCCESS, payload: data})
 
     } catch (error) {
@@ -111,7 +115,8 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
             }
         }
 
-        const {data} = await axios.put(`/api/users/profile`, user, config)
+        //const {data} = await axios.put(`/api/users/profile`, user, config)
+        const {data} = await api.put(`/api/users/profile`, user, config)
         dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data})
         dispatch({ type: USER_LOGIN_SUCCESS, payload: data})
 
@@ -140,7 +145,8 @@ export const forgotPasswordToken = (email) => async(dispatch) => {
             }
         }
 
-        const {data} = await axios.post(`/api/users/forgot-password-token`, {email}, config)
+        //const {data} = await axios.post(`/api/users/forgot-password-token`, {email}, config)
+        const {data} = await api.post(`/api/users/forgot-password-token`, {email}, config)
         dispatch({ type: USER_FORGOT_PASSWORD_SUCCESS, payload: data})
 
     } catch (error) {
@@ -161,7 +167,8 @@ export const resetPassword = (password, token) => async(dispatch) => {
             }
         }
 
-        const {data} = await axios.put(`/api/users/reset-password/${token}`, {password}, config)
+        //const {data} = await axios.put(`/api/users/reset-password/${token}`, {password}, config)
+        const {data} = await api.put(`/api/users/reset-password/${token}`, {password}, config)
         dispatch({ type: USER_RESET_PASSWORD_SUCCESS, payload: data})
 
     } catch (error) {
