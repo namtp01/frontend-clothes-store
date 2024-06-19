@@ -10,6 +10,7 @@ import moment from 'moment';
 import axios from "axios";
 import { ORDER_PAY_RESET } from "../redux/constants/OrderConstants";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import api from "../api";
 
 const OrderScreen = ({ match }) =>
 {
@@ -39,7 +40,7 @@ const OrderScreen = ({ match }) =>
   {
     const addPayPalScript = async () =>
     {
-      const { data: clientId } = await axios.get("/api/config/paypal")
+      const { data: clientId } = await api.get("/api/config/paypal")
       setClientId(clientId)
     }
     if (!order || successPay) {
