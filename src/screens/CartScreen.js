@@ -14,7 +14,7 @@ const CartScreen = () =>
 
   const params = new URLSearchParams(location.search);
   const qty = params.get("qty") ? Number(params.get("qty")) : 1;
-  const color = params.get("color") ? decodeURIComponent(params.get("color")) : "";
+  //const color = params.get("color") ? decodeURIComponent(params.get("color")) : "";
 
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
@@ -24,9 +24,9 @@ const CartScreen = () =>
   useEffect(() =>
   {
     if (productId) {
-      dispatch(addToCart(productId, qty, color || undefined))
+      dispatch(addToCart(productId, qty || undefined))
     }
-  }, [dispatch, productId, qty, color])
+  }, [dispatch, productId, qty])
 
   const checkOutHandler = () =>
   {
@@ -79,7 +79,7 @@ const CartScreen = () =>
                       <Link to={`/products/${item.product}`}>
                         <h4>{item.name}</h4>
                       </Link><br />
-                      <div className="col-md-1 m-5 colors-cart ps-0" style={{ backgroundColor: color }}></div>
+                      {/* <div className="col-md-1 m-5 colors-cart ps-0" style={{ backgroundColor: color }}></div> */}
                     </div>
                     {/* {item.color && (
                       <div className="col-md-1 align-items-center justify-content-center colors-cart ps-0" style={{ backgroundColor: color }}></div>

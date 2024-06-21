@@ -3,7 +3,7 @@ import { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_SAVE_PAYMENT_METHOD, CART_SAVE_SH
 import api from './../../api';
 
 // ADD TO CART 
-export const addToCart = (id, qty, color) => async (dispatch, getState) => {
+export const addToCart = (id, qty) => async (dispatch, getState) => {
     //const {data} = await axios.get(`/api/products/${id}`)
     const {data} = await api.get(`/api/products/${id}`)
 
@@ -16,7 +16,6 @@ export const addToCart = (id, qty, color) => async (dispatch, getState) => {
             price: data.price,
             countInStock: data.countInStock,
             qty,
-            color,
         }
     })
 

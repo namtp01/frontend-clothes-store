@@ -21,9 +21,10 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/search/:keyword/page/:pageNumber" element={<HomeScreen />} />
+        <Route path="/search/:keyword/page/:pageNumber/" element={<HomeScreen />} />
         <Route path="/search/:keyword" element={<HomeScreen />} />
         <Route path="/page/:pagenumber" element={<HomeScreen />} />
+        <Route path="/category/:category" element={<HomeScreen />} />
         <Route path="/" element={<HomeScreen />} />
         <Route path="/products/:id" element={<SingleProduct />} />
         <Route path='/login' element={<Login />} />

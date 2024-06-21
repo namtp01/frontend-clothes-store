@@ -4,12 +4,18 @@ import { PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS, PRODUCT_LIST_FAIL, PRODUCT_
 import api from './../../api';
 
 //  PRODUCT LIST
-export const listProduct = (keyword=" ", pageNumber = " ") => async(dispatch) => {
+export const listProduct = (keyword=" ", pageNumber = " ", category= "") => async(dispatch) => {
     try {
-        console.log(pageNumber); 
         dispatch({ type: PRODUCT_LIST_REQUEST})
         //const {data} = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`)
-        const {data} = await api.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`)
+        //const {data} = await api.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`)
+        const { data } = await api.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}&category=${category}`);
+        // let query = `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+        // if (category) {
+        //     query += `&category=${category}`
+        // }
+
+        // const {data} = await api.get(query)
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data})
         //dispatch({ type: PRODUCT_LIST_SUCCESS, payload: Array.isArray(data) ? data : data.products})
     } catch (error) {

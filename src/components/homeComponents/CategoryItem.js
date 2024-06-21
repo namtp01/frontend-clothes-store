@@ -37,7 +37,6 @@ const Button = styled.button`
     position:absolute;
     top:70px;
     border:none;
-    border-radius:40%;
     padding: 10px;
     background-color: white;
     color:grey;
@@ -50,11 +49,11 @@ const Button = styled.button`
 const CategoryItem = ({item}) => {
   return (
     <Container>
-      <Link to={`/product/${item.cat}`}>
-        <Image src={item.img}/>
+      <Link to={`/category/${item.name}`}>
+        <Image src={item.image}/>
         <Info>
           {/* <Title>{item.title}</Title> */}
-          <Button>{item.title}</Button>
+          <Button>{item.name}</Button>
         </Info>
       </Link>
         

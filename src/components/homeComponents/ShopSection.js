@@ -10,7 +10,7 @@ import Pagination from './Pagination'
 
 const ShopSection = (props) =>
 {
-  const { keyword, pagenumber } = props
+  const { keyword, pagenumber, category } = props
 
   const dispatch = useDispatch()
   const productList = useSelector(state => state.productList)
@@ -18,8 +18,8 @@ const ShopSection = (props) =>
 
   useEffect(() =>
   {
-    dispatch(listProduct(keyword, pagenumber))
-  }, [dispatch, keyword, pagenumber])
+    dispatch(listProduct(keyword, pagenumber, category))
+  }, [dispatch, keyword, pagenumber, category])
 
   return (
     <>
@@ -94,7 +94,7 @@ const ShopSection = (props) =>
                     )
                 }
                 {/* Pagination */}
-                <Pagination pages={pages} page={page} keyword={keyword ? keyword : ""} />
+                <Pagination pages={pages} page={page} keyword={keyword ? keyword : ""} category={category ? category : ""} />
               </div>
             </div>
           </div>

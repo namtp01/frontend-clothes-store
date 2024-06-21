@@ -46,7 +46,8 @@ const SingleProduct = ({ history, match }) =>
     e.preventDefault()
     const encodedColor = encodeURIComponent(selectedColor);
     //history.push(`/cart/${productId}?qty=${qty}`)
-    navigate(`/cart/${productId}?qty=${qty}&color=${encodedColor}`)
+    //navigate(`/cart/${productId}?qty=${qty}&color=${encodedColor}`)
+    navigate(`/cart/${productId}?qty=${qty}`)
   }
 
   const submitHandler = (e) =>
@@ -101,7 +102,7 @@ const SingleProduct = ({ history, match }) =>
                           text={`${product.numReviews} reviews`}
                         />
                       </div>
-                      <div className="flex-box d-flex justify-content-between align-items-center">
+                      {/* <div className="flex-box d-flex justify-content-between align-items-center">
                         <h6>Color</h6>
                         <div className="">
                           <div className="" style={{ backgroundColor: selectedColor }}></div>
@@ -116,7 +117,7 @@ const SingleProduct = ({ history, match }) =>
                             ))}
                           </ul>
                         </div>
-                      </div>
+                      </div> */}
                       {product.countInStock > 0 ? (
                         <>
                           <div className="flex-box d-flex justify-content-between align-items-center">
