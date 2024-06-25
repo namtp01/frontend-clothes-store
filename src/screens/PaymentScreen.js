@@ -15,7 +15,7 @@ const PaymentScreen = ({history}) => {
     navigate("/shipping")
   }
 
-  const [paymentMethod, setPaymentMethod] = useState("Paypal")
+  const [paymentMethod, setPaymentMethod] = useState("")
 
   const dispatch = useDispatch()
 
@@ -36,13 +36,13 @@ const PaymentScreen = ({history}) => {
           <h6>SELECT PAYMENT METHOD</h6>
           <div className="payment-container">
             <div className="radio-container">
-              <input className="form-check-input" type="radio" value={paymentMethod}
+              <input className="form-check-input" type="radio" value="Paypal" checked={paymentMethod === "Paypal"}
                 onChange={(e) => setPaymentMethod(e.target.value)}
               />
               <label className="form-check-label">PayPal or Credit Card</label>
             </div>
             <div className="radio-container">
-              <input className="form-check-input" type="radio" value={paymentMethod}
+              <input className="form-check-input" type="radio" value="Cash" checked={paymentMethod === "Cash"}
                 onChange={(e) => setPaymentMethod(e.target.value)}
               />
               <label className="form-check-label">Cash on Delivery</label>

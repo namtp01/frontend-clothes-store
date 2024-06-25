@@ -7,7 +7,8 @@ import { getUserDetails } from "../redux/actions/UserActions";
 import moment from "moment"
 import { listMyOrders } from "../redux/actions/OrderActions";
 
-const ProfileScreen = () => {
+const ProfileScreen = () =>
+{
   window.scrollTo(0, 0);
   const dispatch = useDispatch()
 
@@ -17,10 +18,11 @@ const ProfileScreen = () => {
   const orderListMy = useSelector((state) => state.orderListMy)
   const { loading, error, orders } = orderListMy
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     dispatch(listMyOrders())
     dispatch(getUserDetails("profile"))
-  },[dispatch])
+  }, [dispatch])
 
   return (
     <>
@@ -35,12 +37,22 @@ const ProfileScreen = () => {
                   <img src="./images/user.png" alt="userprofileimage" />
                 </div>
                 <div className="author-card-details col-md-7">
-                  <h5 className="author-card-name mb-2">
+                  {/* <h5 className="author-card-name mb-2">
                     <strong>{userInfo.name}</strong>
                   </h5>
                   <span className="author-card-position">
                     <>Joined {moment(userInfo.createdAt).format("LL")}</>
-                  </span>
+                  </span> */}
+                  {userInfo && (
+                    <>
+                      <h5 className="author-card-name mb-2">
+                        <strong>{userInfo.name}</strong>
+                      </h5>
+                      <span className="author-card-position">
+                        <>Joined {moment(userInfo.createdAt).format("LL")}</>
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

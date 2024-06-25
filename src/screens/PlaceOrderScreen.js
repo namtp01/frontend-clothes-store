@@ -96,7 +96,7 @@ const PlaceOrderScreen = ({ history }) =>
                 <h5>
                   <strong>Order info</strong>
                 </h5>
-                <p>Shipping: {cart.shippingAddress.country}</p>
+                {/* <p>Shipping: {cart.shippingAddress.country}</p> */}
                 <p>Pay method: {cart.paymentMethod}</p>
               </div>
             </div>
@@ -114,8 +114,8 @@ const PlaceOrderScreen = ({ history }) =>
                   <strong>Deliver to</strong>
                 </h5>
                 <p>
-                  Address: {cart.shippingAddress.city}, {cart.shippingAddress.address},
-                  {cart.shippingAddress.postalCode}
+                  Address: {cart.shippingAddress.address}, {cart.shippingAddress.ward}
+                  {cart.shippingAddress.district}, {cart.shippingAddress.province}
                 </p>
               </div>
             </div>

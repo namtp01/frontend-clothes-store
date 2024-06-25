@@ -30,7 +30,7 @@ const ProfileTabs = () => {
   const { loading: updateLoading } = userUpdateProfile
 
   useEffect(() => {
-    if (user) {
+    if (user && user.name && user.email) {
       setName(user.name)
       setEmail(user.email)
     }
