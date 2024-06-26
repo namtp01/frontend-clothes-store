@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from "../redux/actions/UserActions"
+import { listCategories } from "../redux/actions/CategoryActions"
 
 const Header = () =>
 {
@@ -15,6 +16,18 @@ const Header = () =>
 
     const userLogin = useSelector((state) => state.userLogin)
     const { error, loading, userInfo } = userLogin
+
+    const categoryList = useSelector(state => state.categoryList)
+    const { loadingcategory, errorcategory, categories = [] } = categoryList
+
+    const parentCategories = categories.filter((category) => !category.parent)
+
+    const childCategories = categories.filter((category) => category.parent)
+
+    useEffect(() =>
+    {
+        dispatch(listCategories())
+    }, [dispatch])
 
     const logoutHandler = () =>
     {
@@ -187,51 +200,32 @@ const Header = () =>
                             <p>+84 38 310 6586</p>
                             <p>nam@gmail.com</p>
                         </div> */}
-                        <div className=" col-12 col-lg-6 justify-content-center justify-content-lg-end d-flex align-items-center ">
-                            <div className="dropdown mr-3">
-                                <a className="btn dropdown-toggle" href="#" role="button"
-                                    id="dropdownMenuLink" data-toggle="dropdown" style={{ fontSize: "110%" }}>
+                        <div className="justify-content-center justify-content-lg-center d-flex align-items-center ">
+
+                            <div className="">
+                                <a className="margin-lt-2" href="/" style={{ fontSize: "100%" }}>
                                     ALL PRODUCTS
                                 </a>
-                                <div className="container dropdown-menu">
-                                    <a className="dropdown-item" href="#">T-SHIRT</a>
-                                    <a className="dropdown-item" href="#">SHIRT</a>
-                                    <a className="dropdown-item" href="#">HOODIE</a>
-                                </div>
                             </div>
-                            <div className="dropdown mr-3">
-                                <a className="btn dropdown-toggle" href="#" role="button"
-                                    id="dropdownMenuLink" data-toggle="dropdown" style={{ fontSize: "110%" }}>
-                                    SHIRT
-                                </a>
-                                <div className="dropdown-menu">
-                                    <a className="dropdown-item" href="#">T-SHIRT</a>
-                                    <a className="dropdown-item" href="#">SHIRT</a>
-                                    <a className="dropdown-item" href="#">HOODIE</a>
-                                </div>
-                            </div>
-                            <div className="dropdown mr-3">
-                                <a className="btn dropdown-toggle" href="#" role="button"
-                                    id="dropdownMenuLink" data-toggle="dropdown" style={{ fontSize: "110%" }}>
-                                    PANT
-                                </a>
-                                <div className="dropdown-menu">
-                                    <a className="dropdown-item" href="#">T-SHIRT</a>
-                                    <a className="dropdown-item" href="#">SHIRT</a>
-                                    <a className="dropdown-item" href="#">HOODIE</a>
-                                </div>
-                            </div>
-                            <div className="dropdown mr-3">
-                                <a className="btn dropdown-toggle" href="#" role="button"
-                                    id="dropdownMenuLink" data-toggle="dropdown" style={{ fontSize: "110%" }}>
-                                    COLLECTION
-                                </a>
-                                <div className="dropdown-menu">
-                                    <a className="dropdown-item" href="#">T-SHIRT</a>
-                                    <a className="dropdown-item" href="#">SHIRT</a>
-                                    <a className="dropdown-item" href="#">HOODIE</a>
-                                </div>
-                            </div>
+                            {
+                                parentCategories.map((parent) => (
+                                    <div className="dropdown">
+                                        <a className="btn dropdown-toggle" href={`/category/${parent.name}`} role="button"
+                                            id={`dropdownMenuLink-${parent._id}`} data-toggle="dropdown" style={{ fontSize: "100%" }}>
+                                            {parent.name.toUpperCase()}
+                                        </a>
+                                        <div className="dropdown-menu">
+                                            {
+                                                childCategories
+                                                    .filter((child) => child.parent === parent._id)
+                                                    .map((child) => (
+                                                        <a className="dropdown-item" href={`/category/${child.name}`}>{child.name}</a>
+                                                    ))
+                                            }
+                                        </div>
+                                    </div>
+                                ))
+                            }
                         </div>
                     </div>
                 </div>

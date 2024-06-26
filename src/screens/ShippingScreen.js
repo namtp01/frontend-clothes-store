@@ -13,7 +13,7 @@ const ShippingScreen = ({ history }) =>
   const cart = useSelector((state) => state.cart)
   const { shippingAddress = {} } = cart
   const { phone: initialPhone = "", address: initialAddress = "", ward: initialWard = "", district: initialDistrict = "", province: initialProvince = "" } = shippingAddress
-
+  
   const [province, setProvince] = useState(initialProvince)
   const [district, setDistrict] = useState(initialDistrict)
   const [ward, setWard] = useState(initialWard)
@@ -111,7 +111,7 @@ const ShippingScreen = ({ history }) =>
   const submitHandler = (e) =>
   {
     e.preventDefault()
-    dispatch(saveShippingAddress({ address, province, district, ward }))
+    dispatch(saveShippingAddress({ phone, address, province, district, ward }))
     navigate('/payment');
   };
   return (

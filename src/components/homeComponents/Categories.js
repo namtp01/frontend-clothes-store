@@ -17,12 +17,14 @@ const Categories = () => {
   const categoryList = useSelector(state => state.categoryList)
   const { loading, error, categories = [] } = categoryList
 
+  const parentCategories = categories.filter((category) => !category.parent)
+
   useEffect(() => {
     dispatch(listCategories())
   }, [dispatch])
   return (
     <Container>
-        {categories.map(item=>(
+        {parentCategories.map(item=>(
             <CategoryItem item={item} key={item._id}/>
         ))}
     </Container>

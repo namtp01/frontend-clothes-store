@@ -141,3 +141,35 @@ export const listMyOrders = () => async (dispatch, getState) => {
         })
     }
 }
+
+export const sendOrderDetailsEmail = (email) => async (dispatch, getState) => {
+    try {
+        dispatch({ type: 'SEND_ORDER_DETAILS_EMAIL_REQUEST' })
+
+        const {
+            userLogin: { userInfo }
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            },
+        }
+
+        const { data } = await api.post(`/api/orders/send-order-details`, { email }, config)
+
+        dispatch({
+            type: 'SEND_ORDER_DETAILS_EMAIL_SUCCESS',
+            payload: data,
+        })
+    } catch (error) {
+        dispatch({
+            type: 'SEND_ORDER_DETAILS_EMAIL_FAIL',
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        })
+    }
+}

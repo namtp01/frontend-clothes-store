@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "./../components/Header";
 import { useDispatch, useSelector } from 'react-redux';
 import Message from "../components/LoadingError/Error";
 import { ORDER_CREATE_RESET } from "../redux/constants/OrderConstants";
-import { createOrder } from "../redux/actions/OrderActions";
+import { createOrder, sendOrderDetailsEmail } from "../redux/actions/OrderActions";
+import api from "../api";
+import { updateProductQuantity } from "../redux/actions/ProductActions";
 
 const PlaceOrderScreen = ({ history }) =>
 {
@@ -15,6 +17,8 @@ const PlaceOrderScreen = ({ history }) =>
   const cart = useSelector((state) => state.cart)
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+
+  const [showModal, setShowModal] = useState(false)
 
   // Calculate Price
   const addDecimals = (num) =>
@@ -30,7 +34,7 @@ const PlaceOrderScreen = ({ history }) =>
     cart.itemsPrice > 100 ? 0 : 100
   )
 
-  cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)))
+  cart.taxPrice = addDecimals(Number((0.10 * cart.itemsPrice).toFixed(2)))
 
   cart.totalPrice = (
     Number(cart.itemsPrice) +
@@ -49,23 +53,86 @@ const PlaceOrderScreen = ({ history }) =>
     }
   }, [navigate, dispatch, success, order])
 
-  const placeOrderHandler = (e) =>
+  const placeOrderHandler = async (e) =>
   {
     e.preventDefault();
-    dispatch(createOrder({
-      orderItems: cart.cartItems,
-      shippingAddress: cart.shippingAddress,
-      paymentMethod: cart.paymentMethod,
-      itemsPrice: cart.itemsPrice,
-      shippingPrice: cart.shippingPrice,
-      taxPrice: cart.taxPrice,
-      totalPrice: cart.totalPrice,
-    }))
+
+    if (checkStockBeforeOrder) {
+      dispatch(createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      }))
+
+      dispatch(sendOrderDetailsEmail(userInfo.email))
+
+      cart.cartItems.forEach(async item =>
+        {
+          const { data: product } = await api.get(`/api/products/${item.product}`)
+          const newCountInStock = product.countInStock - item.qty
+          dispatch(updateProductQuantity(item.product, newCountInStock))
+        })
+    } else {
+      navigate('/cart')
+    }
+    
   };
+
+  const checkStockBeforeOrder = () =>
+  {
+    try {
+      cart.cartItems.forEach(async (item) =>
+      {
+        const remainingStock = item.countInStock - item.qty
+
+        if (remainingStock < 0) {
+          setShowModal(true)
+          return false
+        }
+      })
+      setShowModal(false)
+      return true
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
       <Header />
+      {showModal && (
+        <div className="modal" tabindex="-1" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Stock Alert</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => setShowModal(false)}>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  There are only {
+                    cart.cartItems.map((item) => item.countInStock - item.qty).reduce((acc, item) => acc + item, 0)
+                  } products left in stock for this item. 
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-primary" >
+                  Continue Buying 
+                </button>
+                <button type="button" className="btn btn-secondary">
+                  Go Back to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="container">
         <div className="row  order-detail">
           <div className="col-lg-4 col-sm-4 mb-lg-4 mb-5 mb-sm-0">
@@ -96,7 +163,7 @@ const PlaceOrderScreen = ({ history }) =>
                 <h5>
                   <strong>Order info</strong>
                 </h5>
-                {/* <p>Shipping: {cart.shippingAddress.country}</p> */}
+                <p>Phone Number: {cart.shippingAddress.phone}</p>
                 <p>Pay method: {cart.paymentMethod}</p>
               </div>
             </div>
@@ -115,7 +182,7 @@ const PlaceOrderScreen = ({ history }) =>
                 </h5>
                 <p>
                   Address: {cart.shippingAddress.address}, {cart.shippingAddress.ward}
-                  {cart.shippingAddress.district}, {cart.shippingAddress.province}
+                  , {cart.shippingAddress.district}, {cart.shippingAddress.province}
                 </p>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "./../components/Header";
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrderDetails, payOrder } from "../redux/actions/OrderActions";
@@ -18,6 +18,7 @@ const OrderScreen = ({ match }) =>
   const [clientId, setClientId] = useState("");
   const { id: orderId } = useParams()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const orderDetails = useSelector((state) => state.orderDetails)
   const { order, loading, error } = orderDetails
@@ -57,16 +58,18 @@ const OrderScreen = ({ match }) =>
   {
     dispatch(payOrder(orderId, paymentResult))
 
-    order.orderItems.forEach(async item => {
-      const { data: product } = await axios.get(`/api/products/${item.product}`)
-      const newCountInStock = product.countInStock - item.qty
-      dispatch(updateProductQuantity(item.product, newCountInStock))
-    })
+    // order.orderItems.forEach(async item =>
+    // {
+    //   const { data: product } = await api.get(`/api/products/${item.product}`)
+    //   const newCountInStock = product.countInStock - item.qty
+    //   dispatch(updateProductQuantity(item.product, newCountInStock))
+    // })
   }
 
   return (
     <>
       <Header />
+      
       <div className="container">
         {
           loading ? (<Loading />) : error ? (<Message variant="alert-danger">{error}</Message>) : (
@@ -102,7 +105,7 @@ const OrderScreen = ({ match }) =>
                       <h5>
                         <strong>Order info</strong>
                       </h5>
-                      <p>Shipping: {order.shippingAddress.country}</p>
+                      <p>Phone Number: {order.shippingAddress.phone}</p>
                       <p>Pay method: {order.paymentMethod}</p>
                       {
                         order.isPaid ? (
@@ -135,8 +138,8 @@ const OrderScreen = ({ match }) =>
                         <strong>Deliver to</strong>
                       </h5>
                       <p>
-                        Address: {order.city}, {order.shippingAddress.address},
-                        {order.shippingAddress.postalCode}
+                        Address: {order.shippingAddress.address}, {order.shippingAddress.ward}
+                        , {order.shippingAddress.district}, {order.shippingAddress.province}
                       </p>
                       {
                         order.isDelivered ? (
